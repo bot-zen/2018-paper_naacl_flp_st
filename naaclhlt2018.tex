@@ -118,7 +118,13 @@ patterns~\cite{arXiv:1310.4546}.
 
 
 \subsection{Language Learner Data}
-FIXME.
+% FIXME
+
+\begin{quotation}
+Patterns of language are usually perceived, learned and used as meaningful chunks that are processed as a whole, resulting in a reduced learning burden and increased fluency. The ability to comprehend and produce lexical chunks or groups of words which are commonly found together is an important part of language acquisition. This paper demonstrates how an awareness of conceptual metaphor and grouping of various words and expressions in a metaphorical chunk may improve the process of vocabulary acquisition. Since words that appear in language as a result of metaphorical extensions resemble other etymologically related words, this method may help learners in establishing mental associations and speed up learning, especially if students already know words to which new vocabulary is related. In this way, learners' prior knowledge would assist in assimilating new information by reducing burden on limited-capacity working memory. The current paper offers a specific example of implementing this approach, and demonstrates how Russian words and idiomatic expressions can be presented in metaphorical chunks to facilitate cognitively efficient learning. It suggests that a similar approach may potentially be extended to syntactic properties of words that could be explained via conceptual metaphors encoded in their origin. By exploring this connection, a metaphorical approach could also be used in teaching grammar.
+\end{quotation}
+\cite{Kalyuga2008}
+
 
 \section{Implementation} %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \label{sec:implementation}
@@ -155,7 +161,7 @@ input words for our NN.
 
 Our implementation uses Keras, a high-level NNs library, written in Python and
 capable of running on top of either TensorFlow or Theano~\cite{chollet2015}. 
-In our case it runs on top of TensorFlow, an open source software library for numerical computation~\cite{tensorflow2015-whitepaper}.
+In our case it runs on top of TensorFlow, an open source software library for numerical computation~\cite{tensorflow2016}.
 
 The input to our network are parallel sequences of the same length as the sentences we
 process.
@@ -190,7 +196,10 @@ documented and suggested option to be used---for our type of architecture.
 The parameters of the system were optimised via an ad-hoc grid search. Parameters were:
 optimizer, recurrent\_dropout, sequence length, learning epochs and batch size, and the network architecture, e.g.~introducing a second LSTM abstraction layer or using a Gated Recurrent (GRU) layer instead of the LSTM layer.
 
-We used pre-built WEs for the large corpora. bnc and enTenTen \cite{1120431} from the SketchEngine\footnote{\url{https://sketchengine.co.uk}} \cite{DBLP:journals/corr/BojanowskiGJM16}. Wikipedia from fastText \cite{mikolov2018advances}. 
+We used pre-built WEs for the large corpora. BNC and enTenTen \cite{1120431}
+from the SketchEngine\footnote{\url{https://sketchengine.co.uk}}
+\cite{DBLP:journals/corr/BojanowskiGJM16}. Wikipedia from fastText
+\cite{mikolov2018advances}. 
 
 The considerably smaller TOEFL11 corpus was split into three parts corresponding to the three labelled proficiency levels (low, medium, high) and WEs were computed.
 
