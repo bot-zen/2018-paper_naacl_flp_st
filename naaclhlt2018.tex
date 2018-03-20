@@ -13,10 +13,11 @@
 
 \documentclass[11pt,a4paper]{article}
 
-% Added language and encoding support
+% Added language, encoding and todos support
 % 201803 by egon.stemle@eurac.edu
 \usepackage[english]{babel}
 \usepackage[utf8x]{inputenc}
+\usepackage[colorinlistoftodos]{todonotes}
 
 \usepackage[hyperref]{naaclhlt2018}
 \usepackage{times}
@@ -70,6 +71,8 @@ NOTE: this is a draft --- we haven't received an answer to our question to the o
 } %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \label{sec:intro}
 
+\todo[color=green]{A few words on (conceptual) metaphor and its challenge for automated detection would be good here - @alex} 
+
 Our system combines \fT \cite{bojanowski2016enriching} word embeddings (WEs) with a
 single-layer Long Short Term Memory (LSTM) bidirectional recurrent neural network (BRNN)
 architecture.
@@ -98,8 +101,7 @@ processing tasks. The current design is a variation of \cite{W16-1104} who used 
 
 Recently, state-of-the-art results on various linguistic tasks were
 accomplished by architectures using neural-network based WEs.
-\newcite{baroni-dinu-kruszewski:2014:P14-1} conducted a set of
-experiments comparing the popular
+\newcite{baroni-dinu-kruszewski:2014:P14-1} conducted a set of experiments comparing the popular
 word2vec~\cite{DBLP:journals/corr/abs-1301-3781,arXiv:1310.4546}
 implementation for creating WEs with other distributional methods that yielded
 valuable results across various (semantic) tasks. 
@@ -122,13 +124,12 @@ patterns~\cite{arXiv:1310.4546}.
 \subsection{Language Learner Data}
 % FIXME:
 % write something about language learner data, e.g. why and how it might be helpful...
-% 
-% following: a loosely related quote (which should be removed/drastically shortened)
 
-Our experimental design also utilizes data from language learner corpora, specifically from the TOEFL 11 corpus\cite{ETS2:ETS202331}. This is based on the intuition that metaphor use might vary depending on learner proficiency.
-\newcite{Klebanov & Flor (2013: 18)} indeed found a correlation between higher proficiency ratings of learner texts and a higher density of metaphors in these texts. Their study is also one of the few in the field of automated metaphor detection that are concerned with learner language. Their aim, however, is quite different to the current study as they try to establish annotations for metaphoric language use that can help to train an automated classifier of metaphors in test-taker essays. The current study, by contrast, utilizes learner corpus data to build WEs among other corpora representing written standard language. Learner language could be a particularly helpful source of information for automated metaphor detection via WEs as learner language provides different usage patterns compared to WEs derived from standard language corpora.
+Our experimental design also utilizes data from language learner corpora, specifically from the TOEFL 11 corpus \cite{ETS2:ETS202331}. This is based on the intuition that metaphor use might vary depending on learner proficiency.
+\newcite{W13-0902} %p.18 
+indeed found a correlation between higher proficiency ratings of learner texts and a higher density of metaphors in these texts. Their study is also one of the few in the field of automated metaphor detection that are concerned with learner language. Their aim, however, is quite different to the current study as they try to establish annotations for metaphoric language use that can help to train an automated classifier of metaphors in test-taker essays. The current study, by contrast, utilizes learner corpus data to build WEs among other corpora representing written standard language. Learner language could be a particularly helpful source of information for automated metaphor detection via WEs as learner language provides different usage patterns compared to WEs derived from standard language corpora.
 
-
+\todo{removed/drastically shorten loosely related quote}
 \begin{quotation}
 Patterns of language are usually perceived, learned and used as meaningful chunks that are processed as a whole, resulting in a reduced learning burden and increased fluency. The ability to comprehend and produce lexical chunks or groups of words which are commonly found together is an important part of language acquisition. This paper demonstrates how an awareness of conceptual metaphor and grouping of various words and expressions in a metaphorical chunk may improve the process of vocabulary acquisition. Since words that appear in language as a result of metaphorical extensions resemble other etymologically related words, this method may help learners in establishing mental associations and speed up learning, especially if students already know words to which new vocabulary is related. In this way, learners' prior knowledge would assist in assimilating new information by reducing burden on limited-capacity working memory. The current paper offers a specific example of implementing this approach, and demonstrates how Russian words and idiomatic expressions can be presented in metaphorical chunks to facilitate cognitively efficient learning. It suggests that a similar approach may potentially be extended to syntactic properties of words that could be explained via conceptual metaphors encoded in their origin. By exploring this connection, a metaphorical approach could also be used in teaching grammar.
 \end{quotation}
@@ -137,6 +138,9 @@ Patterns of language are usually perceived, learned and used as meaningful chunk
 
 \section{Implementation} %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \label{sec:implementation}
+
+\todo[color=green]{Specify the predefined length of input sentences. - @egon}
+\todo[color=green]{a few words of explenation: "sequences are padded" - @egon}
 
 We maintain the implementation in a source code repository at
 \url{https://github.com/bot-zen/}.  
@@ -147,7 +151,9 @@ Our system feeds sequences of WEs into a single-layer BRNN with a LSTM architect
 
 
 \subsection{Word Embeddings} %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\todo[color=green]{Add a bit of content @egon}
 
+\todo{Should we use the/some of the following comment at all?}
 % When computing WEs we take into consideration \newcite{TACL570}: they observed
 % that one specific configuration of word2vec, namely the skip-gram model with
 % negative sampling (SGNS) 
@@ -168,12 +174,14 @@ input words for our Neural Network (NN).
 
 \subsection{Recurrent Neural Network Layer} %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\todo{are the input sentences those taken from the MIPVU corpus to be annotated for metaphorical words or are they extracted from the corpora (i.e. Word Embeddings)? --perhaps we could add some more information on the nature of these sentences}
+
 Our implementation uses Keras, a high-level NNs library, written in Python and
 capable of running on top of either TensorFlow or Theano~\cite{chollet2015}. 
 In our case it runs on top of TensorFlow, an open source software library for numerical computation~\cite{tensorflow2016}.
 
 The input to our network are parallel sequences of the same length. They consist of (insert length) sentences.
-% FIXME: formalise this like:
+\todo[color=green]{formalise this - @egon} %like:
 % $S_{1,1}\ ^\frown S_{1,2}, S_{2,1}\ ^\frown S_{2,2}, \ldots, S_{n,m}$
 % Each $S_{n,m}$ is output of an embeddings lookup for a specific model.
 
@@ -201,6 +209,7 @@ conjunction with the RMSprop optimization for learning.  The weights are calcula
 At the time of writing, this was the Keras default---or the explicitly
 documented and suggested option to be used---for our type of architecture. 
 
+\todo{should we say something more on the “surrounding” from which WE were computed?}
 
 \section{Experiments and Results} %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \label{sec:results}
@@ -212,6 +221,7 @@ from the SketchEngine\footnote{\url{https://sketchengine.co.uk}}
 \cite{mikolov2018advances}. 
 
 The considerably smaller TOEFL11 corpus was split into three parts corresponding to the three labelled proficiency levels (low, medium, high) and WEs were computed for each.
+\todo[color=green]{more on how the WE were computed from TOEFL 11 - @egon}
 
 \subsection{Hyper-parameter tuning} %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 Hyper-parameter tuning is important for good performance. The parameters of our system were optimised via an ad-hoc grid search. Parameters were:
@@ -241,6 +251,7 @@ bnc + T11 (all) & $0.61$ \\ \hline
 
 \section{Conclusion \& Outlook} %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \label{sec:conclusion}
+\todo{Add content}
 
 %\section*{Acknowledgments} %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %The computational results presented have been achieved in part using the Vienna
