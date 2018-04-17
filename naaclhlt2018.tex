@@ -40,8 +40,8 @@
 % Added
 % 201804 by egon.stemle@eurac.edu
 % 'Solve' error: \pdfendlink ended up in different nesting level than \pd %%%%%
-\let\oldhref\href
-\renewcommand{\href}[2]{\oldhref{#1}{\hbox{#2}}}
+%\let\oldhref\href
+%\renewcommand{\href}[2]{\oldhref{#1}{\hbox{#2}}}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \usepackage{url}
@@ -63,7 +63,7 @@
 \title{Using Language Learner Data for Metaphor Detection}
 
 \author{Egon W.~Stemle \\
-  Eurac Research \\ 
+  Eurac Research \\
   Bolzano-Bozen, Italy \\
   {\tt egon.stemle@eurac.edu} \\\And
   Alexander Onysko \\
@@ -168,7 +168,7 @@ The output is a single sequence of matching length with labels indicating whethe
 
 \subsection{Word Embeddings} %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-We use gensim\footnote{\url{https://radimrehurek.com/gensim/}}, a Python tool for unsupervised semantic modelling from plain text, to load pre-computed WE models, and to compute a word's embedding vector representation for our NN. 
+We use gensim\footnote{\url{https://radimrehurek.com/gensim/}}, a Python tool for unsupervised semantic modelling from plain text, to load pre-computed WE models, and to compute a word's embedding vector representation for our {NN}.
 Words missing in a WE model, i.e.~out-of-vocabulary words (OOV), are first estimated by a fixed context of non-OOVs of the OOV word.
 And if this fails, OOVs are mapped to an ultimately stable, but at first randomly generated, vector representation.
 
@@ -326,69 +326,69 @@ indeed found a correlation between higher proficiency ratings of learner texts a
 
 \multirow[t]{2}{*}{T11 (low)} % 245.130
     % NLI_2013_low_min1_dim50-10fold    0.207   91.7    +/- 1.64
-    & 0.3 & 1 & 50 & X &   &   &  &  & &  &  &  & & 0.207 & 0.917 & 0.016  \\ 
+    & 0.3 & 1 & 50 & X &   &   &  &  & &  &  &  & & 0.207 & 0.917 & 0.016  \\
     \cline{2-17}
     % NLIs_low_med_high__voice__bnc-10fold  0.601   95.0    +/- 0.36
-    & 204.5 &  &   & X  & X & X  &  & X  & X &  &  &  &  & 0.601  & 0.950 & 0.004   \\ 
+    & 204.5 &  &   & X  & X & X  &  & X  & X &  &  &  &  & 0.601  & 0.950 & 0.004   \\
     \cline{2-17}
     % NLIs_low_med_high__voice__ententen-10fold 0.603   94.7    +/- 0.64
-    & 19,004.5  &  &   & X  & X & X  &  & X  &  & X &  &  &  & 0.603  & 0.947 & 0.006   \\ 
+    & 19,004.5  &  &   & X  & X & X  &  & X  &  & X &  &  &  & 0.603  & 0.947 & 0.006   \\
     \cline{2-17}
     % NLIs_low_med_high__voice__bnc__wiki__ententen-10fold  0.597   95.2    +/- 0.31
-    & 21,404.5  &  &   & X  & X & X  &  & X  & X & X &  &  & X & 0.597  & 0.952 & 0.003   \\ 
+    & 21,404.5  &  &   & X  & X & X  &  & X  & X & X &  &  & X & 0.597  & \textbf{0.952} & 0.003   \\
     \cline{2-17}
     % NLIs_low_med_high__ukwac-NLI-size_sample_min1_dim50-10fold    0.576   94.1    +/- 0.34
-    & 7  &  &   & X  & X & X  &  &   &  &  &  & X &  & 0.576  & 0.941 & 0.003   \\ 
+    & 7  &  &   & X  & X & X  &  &   &  &  &  & X &  & 0.576  & 0.941 & 0.003   \\
 \hline
 \multirow[t]{2}{*}{T11 (med)} %  1.819.407
     % NLI_2013_med_min1_dim50-10fold    0.526   92.4    +/- 1.06
-    & 1.8 & 1 & 50 &   & X &   &  &  & &  &  &  & & 0.526 & 0.924 & 0.011  \\ 
+    & 1.8 & 1 & 50 &   & X &   &  &  & &  &  &  & & 0.526 & 0.924 & 0.011  \\
 \hline
 \multirow[t]{3}{*}{T11 (high)} %  1.388.260
     % NLI_2013_high_min1_dim50-10fold   0.514   93.0    +/- 0.74
-    & 1.4 & 1 & 50 &   &   & X &   &  &  &  &  &  & & 0.514 & 0.930 & 0.007  \\ 
+    & 1.4 & 1 & 50 &   &   & X &   &  &  &  &  &  & & 0.514 & 0.930 & 0.007  \\
 \hline
 \multirow[t]{2}{*}{T11 (l+m+h) } %  3.452.797
     % NLI_2013_all_min1_dim50-10fold    0.541   92.8    +/- 0.82
-    &   3.5 & 1 & 50 &  &  &   & X &   &   &  &  &  & & 0.541 & 0.928 & 0.008  \\ 
+    &   3.5 & 1 & 50 &  &  &   & X &   &   &  &  &  & & 0.541 & 0.928 & 0.008  \\
     \cline{2-17}
     % NLIs_all__bnc_min1_dim50-10fold   0.613   94.5    +/- 0.53
-    & 103.5 &   &    &  &  &   & X &   & X &  &  &  & & 0.613 & 0.945 & 0.005  \\ 
+    & 103.5 &   &    &  &  &   & X &   & X &  &  &  & & \textbf{0.613} & 0.945 & 0.005  \\
 \hline
 \multirow[t]{2}{*}{VOICE} %  Voice 1-million-word, 1.003.696
     % voice_min1_dim50-10fold   0.495   92.3    +/- 0.95
-    & 1 & 1 & 50 &  &  &  &  & X & &  &  &  & & 0.495 & 0.923 & 0.010  \\ 
+    & 1 & 1 & 50 &  &  &  &  & X & &  &  &  & & 0.495 & 0.923 & 0.010  \\
 \hline
 \hline
 % https://embeddings.sketchengine.co.uk/static/index.html
 \multirow[t]{2}{*}{BNC} %  BNC 100-million-word, 100.000.000
     % bnc-10fold    0.597   94.2    +/- 0.54
-    & 100      & 5 & 100 &  &  &  &  &   & X &    &  &  &   & 0.597 & 0.942 & 0.005  \\ 
+    & 100      & 5 & 100 &  &  &  &  &   & X &    &  &  &   & 0.597 & 0.942 & 0.005  \\
     \cline{2-17}
     % ukwac-NLI-size__bnc_min1_dim50-10fold 0.597   94.8    +/- 0.31
-    & 103.5    &   &     &  &  &   &  &   & X &  &  & X &  & 0.597 & 0.948 & 0.003  \\ 
+    & 103.5    &   &     &  &  &   &  &   & X &  &  & X &  & 0.597 & 0.948 & 0.003  \\
     \cline{2-17}
     % bnc__wiki__ententen-10fold    0.605   95.1    +/- 0.34
-    & 21,400 &   &     &  &  &   &  &   & X & X  &  &  & X & 0.605 & 0.951 & 0.003  \\ 
+    & 21,400 &   &     &  &  &   &  &   & X & X  &  &  & X & 0.605 & 0.951 & 0.003  \\
 \hline
 \multirow[t]{2}{*}{enTenTen13} % 
     % ententen-10fold   0.594   94.7    +/- 0.40
-    & 19,000 & 5 & 100 & &  &  &  &  &   & X &  &  & & 0.594 & 0.947 & 0.004  \\ 
+    & 19,000 & 5 & 100 & &  &  &  &  &   & X &  &  & & 0.594 & 0.947 & 0.004  \\
 \hline
 \hline
 \multirow[t]{2}{*}{ukWaC} %  2.119.891.296 tokens
     % ukwac-10fold  0.598   94.5    +/- 0.41
-    & 2,100 & 5 & 100 &  &  &  &  &  &  &  & X  &  &  & 0.598 & 0.945 & 0.004  \\ 
+    & 2,100 & 5 & 100 &  &  &  &  &  &  &  & X  &  &  & 0.598 & 0.945 & 0.004  \\
 \hline % \cline{2-17}
 \multirow[t]{2}{*}{ukWaC T11-size} %  
     % ukwac-NLI-size_sample_min1_dim50-10fold   0.564   93.3    +/- 0.93
-    & 3.5 & 1 & 50 &  &  &  &  &  &  &  &  & X  &  & 0.564 & 0.933 & 0.009  \\ 
+    & 3.5 & 1 & 50 &  &  &  &  &  &  &  &  & X  &  & 0.564 & 0.933 & 0.009  \\
 \hline
 \hline
 %% https://fasttext.cc/docs/en/pretrained-vectors.html
 \multirow[t]{2}{*}{Wikipedia17} %  
     % wiki-10fold   0.586   94.7    +/- 0.32
-    & ca 2,300 & 5 & 300 &  &  &  &  &  &  &  &  &  & X & 0.586 & 0.947 & 0.003  \\ 
+    & ca 2,300 & 5 & 300 &  &  &  &  &  &  &  &  &  & X & 0.586 & 0.947 & 0.003  \\
 \hline
 \end{tabular}
 \end{center}
