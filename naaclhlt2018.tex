@@ -17,7 +17,7 @@
 % 201803 by egon.stemle@eurac.edu
 \usepackage[english]{babel}
 \usepackage[utf8x]{inputenc}
-% NOTES  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% NOTES  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \usepackage[usenames]{xcolor}
 \usepackage[draft,inline,nomargin,index]{fixme}
 \fxsetup{theme=color,mode=multiuser}
@@ -27,13 +27,22 @@
 
 \newcommand{\egon}[1]{\egonnote{#1}}
 \newcommand{\alex}[1]{\alexnote{#1}}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% table packages %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \usepackage{graphicx}
 \usepackage{multirow}
+\usepackage{siunitx}
+\sisetup{input-ignore={,},group-separator={,},input-decimal-markers={.}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \usepackage[hyperref]{naaclhlt2018}
 \usepackage{times}
 \usepackage{latexsym}
+% Added
+% 201804 by egon.stemle@eurac.edu
+% 'Solve' error: \pdfendlink ended up in different nesting level than \pd %%%%%
+\let\oldhref\href
+\renewcommand{\href}[2]{\oldhref{#1}{\hbox{#2}}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \usepackage{url}
 
@@ -240,82 +249,146 @@ indeed found a correlation between higher proficiency ratings of learner texts a
 
 \subsubsection{Overview of all Input}
 
-%\begin{table*}[t]
-\begin{table}[h!]
-\begin{center}
-\small
-\begin{tabular}{|l|r|r|r|}
-\hline
-\multicolumn{1}{|c}{\textbf{Name}}		& 
-\multicolumn{1}{c}{\shortstack[c]{\textbf{Tokens} \\ \textbf{(Mio)}}} 		& 
-\multicolumn{1}{c}{\shortstack[c]{\textbf{min} \\ \textbf{Cnt}}} 			& 
-\multicolumn{1}{c|}{\textbf{dim}} 		\\ 
-\hline
-\hline
-% https://embeddings.sketchengine.co.uk/static/index.html
-BNC   		& $100$ 	& 5		& 100 \\ % BNC 100-million-word, 100.000.000
-\hline
-enTenTen13	& $20,000$ 	& 5		& 100 \\ %
-\hline
-\hline
-% https://fasttext.cc/docs/en/pretrained-vectors.html
-Wikipedia17	& $~2,300$  & 5	& 300 \\ %
-\hline
-\hline
-ukWaC 		& $2,100$ 	& 5	& 100 \\ % 2.119.891.296
-ukWaC T11-size	& $3.5$ & 1	&  50 \\ %
-\hline
-%\multicolumn{4}{|l|}{TOEFL11 (T11) Training Set} \\
-%% https://catalog.ldc.upenn.edu/LDC2014T06
+%%\begin{table*}[t]
+%\begin{table}[!ht]
+%\begin{center}
+%\small
+%\begin{tabular}{|l|r|r|r|}
 %\hline
-T11 (low) 	& $0.3$ 	& 1	&  50 \\ %   245.130
-T11 (med) & $1.8$	& 1	&  50 \\ % 1.819.407
-T11 (high)	& $1.4$ 	& 1	&  50 \\ % 1.388.260
+%\multicolumn{1}{|c}{\textbf{Name}}		& 
+%\multicolumn{1}{c}{\shortstack[c]{\textbf{Tokens} \\ \textbf{(Mio)}}} 		& 
+%\multicolumn{1}{c}{\shortstack[c]{\textbf{min} \\ \textbf{Cnt}}} 			& 
+%\multicolumn{1}{c|}{\textbf{dim}} 		\\ 
 %\hline
-T11 (low+med+high)	& $3.5$ 	& 1	&  50 \\ % 3.452.797 tokens
-\hline
-VOICE       & $1$ 	 	& 1	&  50  \\ % Voice 1-million-word, 1.003.696
-\hline
-\end{tabular}
-\end{center}
-\caption{\label{tab:models}.} 
-\end{table}
-%\end{table*}
-
+%\hline
+%% https://embeddings.sketchengine.co.uk/static/index.html
+%BNC   		& $100$ 	& 5		& 100 \\ % BNC 100-million-word, 100.000.000
+%\hline
+%enTenTen13	& $20,000$ 	& 5		& 100 \\ %
+%\hline
+%\hline
+%% https://fasttext.cc/docs/en/pretrained-vectors.html
+%Wikipedia17	& $~2,300$  & 5	& 300 \\ %
+%\hline
+%\hline
+%ukWaC 		& $2,100$ 	& 5	& 100 \\ % 2.119.891.296
+%ukWaC T11-size	& $3.5$ & 1	&  50 \\ %
+%\hline
+%%\multicolumn{4}{|l|}{TOEFL11 (T11) Training Set} \\
+%%% https://catalog.ldc.upenn.edu/LDC2014T06
+%%\hline
+%T11 (low) 	& $0.3$ 	& 1	&  50 \\ %   245.130
+%T11 (med) & $1.8$	& 1	&  50 \\ % 1.819.407
+%T11 (high)	& $1.4$ 	& 1	&  50 \\ % 1.388.260
+%%\hline
+%T11 (low+med+high)	& $3.5$ 	& 1	&  50 \\ % 3.452.797 tokens
+%\hline
+%VOICE       & $1$ 	 	& 1	&  50  \\ % Voice 1-million-word, 1.003.696
+%\hline
+%\end{tabular}
+%\end{center}
+%\caption{\label{tab:models}.} 
+%\end{table}
+%%\end{table*}
+%
 
 \begin{table*}[t]
 \setlength{\tabcolsep}{3pt}
 \begin{center}
-\small
-\begin{tabular}{|l|c|c|c|c|c|c|c|c|c|c|}
+%\small
+\begin{tabular}{|l|S[table-format=6.1]|r|r||c|c|c|c|c|c|c|c|c|c||r|rr|}
 \hline
-\multicolumn{1}{|c}{}		& 
-\multicolumn{1}{|c|}{\rotatebox{90}{BNC}} 		& 
-\multicolumn{1}{c|}{\rotatebox{90}{enTenTen13}} 			& 
-\multicolumn{1}{c|}{\rotatebox{90}{Wikipedia17}} 		&
-\multicolumn{1}{c|}{\rotatebox{90}{ukWaC}} 		&
-\multicolumn{1}{c|}{\rotatebox{90}{ukWaC T11-size}} 		&
-\multicolumn{1}{c|}{\rotatebox{90}{T11 (low)}} 		&
-\multicolumn{1}{c|}{\rotatebox{90}{T11 (med)}} 		&
-\multicolumn{1}{c|}{\rotatebox{90}{T11 (high)}} 		&
-\multicolumn{1}{c|}{\rotatebox{90}{T11 (l+m+h)}} 		&
-\multicolumn{1}{c|}{\rotatebox{90}{VOICE}} 		\\
+    \multicolumn{1}{|c}{}		& 
+    \multicolumn{1}{|c| }{\shortstack[c]{\textbf{Tokens} \\ \textbf{(Mio)}}}		& 
+    \multicolumn{1}{ c| }{\shortstack[c]{\textbf{min} \\ \textbf{Cnt}}}		& 
+    \multicolumn{1}{ c||}{\shortstack[c]{\textbf{dim} }}		& 
+    \multicolumn{1}{ c| }{\rotatebox{90}{T11 (low)}} 		&
+    \multicolumn{1}{ c| }{\rotatebox{90}{T11 (med)}} 		&
+    \multicolumn{1}{ c| }{\rotatebox{90}{T11 (high)}} 		&
+    \multicolumn{1}{ c| }{\rotatebox{90}{T11 (l+m+h)}} 		&
+    \multicolumn{1}{ c| }{\rotatebox{90}{VOICE}} 		&
+    \multicolumn{1}{ c| }{\rotatebox{90}{BNC}} 		& 
+    \multicolumn{1}{ c| }{\rotatebox{90}{enTenTen13}} 			& 
+    \multicolumn{1}{ c| }{\rotatebox{90}{ukWaC}} 		&
+    \multicolumn{1}{ c| }{\rotatebox{90}{ukWaC T11-size\ }} 		&
+    \multicolumn{1}{ c||}{\rotatebox{90}{Wikipedia17}} 		&
+    \multicolumn{1}{ c| }{\rotatebox{90}{F-score on Test Set\ }} 		&
+    \multicolumn{2}{ c| }{\shortstack[c]{10-fold CV \\ Accuracy \\ on Training Set \\ $\mu$ | $\sigma$ }} 		\\
+\hline
+\hline
 
+
+%T11 (low) 	& $0.3$ 	& 1	&  50 \\ %   245.130
+%T11 (med)  & $1.8$	    & 1	&  50 \\ % 1.819.407
+%T11 (high)	& $1.4$ 	& 1	&  50 \\ % 1.388.260
+%%\hline
+%T11 (low+med+high)	& $3.5$ 	& 1	&  50 \\ % 3.452.797 tokens
+
+\multirow[t]{2}{*}{T11 (low)} % 245.130
+    % NLI_2013_low_min1_dim50-10fold    0.207   91.7    +/- 1.64
+    & 0.3 & 1 & 50 & X &   &   &  &  & &  &  &  & & 0.207 & 0.917 & 0.016  \\ 
+    \cline{2-17}
+    % NLIs_low_med_high__voice__bnc-10fold  0.601   95.0    +/- 0.36
+    & 204.5 &  &   & X  & X & X  &  & X  & X &  &  &  &  & 0.601  & 0.950 & 0.004   \\ 
+    \cline{2-17}
+    % NLIs_low_med_high__voice__ententen-10fold 0.603   94.7    +/- 0.64
+    & 19,004.5  &  &   & X  & X & X  &  & X  &  & X &  &  &  & 0.603  & 0.947 & 0.006   \\ 
+    \cline{2-17}
+    % NLIs_low_med_high__voice__bnc__wiki__ententen-10fold  0.597   95.2    +/- 0.31
+    & 21,404.5  &  &   & X  & X & X  &  & X  & X & X &  &  & X & 0.597  & 0.952 & 0.003   \\ 
+    \cline{2-17}
+    % NLIs_low_med_high__ukwac-NLI-size_sample_min1_dim50-10fold    0.576   94.1    +/- 0.34
+    & 7  &  &   & X  & X & X  &  &   &  &  &  & X &  & 0.576  & 0.941 & 0.003   \\ 
+\hline
+\multirow[t]{2}{*}{T11 (med)} %  1.819.407
+    % NLI_2013_med_min1_dim50-10fold    0.526   92.4    +/- 1.06
+    & 1.8 & 1 & 50 &   & X &   &  &  & &  &  &  & & 0.526 & 0.924 & 0.011  \\ 
+\hline
+\multirow[t]{3}{*}{T11 (high)} %  1.388.260
+    % NLI_2013_high_min1_dim50-10fold   0.514   93.0    +/- 0.74
+    & 1.4 & 1 & 50 &   &   & X &   &  &  &  &  &  & & 0.514 & 0.930 & 0.007  \\ 
+\hline
+\multirow[t]{2}{*}{T11 (l+m+h) } %  3.452.797
+    % NLI_2013_all_min1_dim50-10fold    0.541   92.8    +/- 0.82
+    &   3.5 & 1 & 50 &  &  &   & X &   &   &  &  &  & & 0.541 & 0.928 & 0.008  \\ 
+    \cline{2-17}
+    % NLIs_all__bnc_min1_dim50-10fold   0.613   94.5    +/- 0.53
+    & 103.5 &   &    &  &  &   & X &   & X &  &  &  & & 0.613 & 0.945 & 0.005  \\ 
+\hline
+\multirow[t]{2}{*}{VOICE} %  Voice 1-million-word, 1.003.696
+    % voice_min1_dim50-10fold   0.495   92.3    +/- 0.95
+    & 1 & 1 & 50 &  &  &  &  & X & &  &  &  & & 0.495 & 0.923 & 0.010  \\ 
+\hline
 \hline
 % https://embeddings.sketchengine.co.uk/static/index.html
-\multirow{2}{*}{{BNC}} %
-   & b & e & w & u & u & T & T & T & T & V \\ 
-   & b & e & w & u & u & T & T & T & T & V \\ 
+\multirow[t]{2}{*}{BNC} %  BNC 100-million-word, 100.000.000
+    % bnc-10fold    0.597   94.2    +/- 0.54
+    & 100      & 5 & 100 &  &  &  &  &   & X &    &  &  &   & 0.597 & 0.942 & 0.005  \\ 
+    \cline{2-17}
+    % ukwac-NLI-size__bnc_min1_dim50-10fold 0.597   94.8    +/- 0.31
+    & 103.5    &   &     &  &  &   &  &   & X &  &  & X &  & 0.597 & 0.948 & 0.003  \\ 
+    \cline{2-17}
+    % bnc__wiki__ententen-10fold    0.605   95.1    +/- 0.34
+    & 21,400 &   &     &  &  &   &  &   & X & X  &  &  & X & 0.605 & 0.951 & 0.003  \\ 
 \hline
-enTenTen13	\\ 
-Wikipedia17	\\ 
-ukWaC 		\\
-ukWaC T11-size \\
-T11 (low)  \\
-T11 (med)  \\ 
-T11 (high) \\
-T11 (l+m+h)	\\
-VOICE       \\
+\multirow[t]{2}{*}{enTenTen13} % 
+    % ententen-10fold   0.594   94.7    +/- 0.40
+    & 19,000 & 5 & 100 & &  &  &  &  &   & X &  &  & & 0.594 & 0.947 & 0.004  \\ 
+\hline
+\hline
+\multirow[t]{2}{*}{ukWaC} %  2.119.891.296 tokens
+    % ukwac-10fold  0.598   94.5    +/- 0.41
+    & 2,100 & 5 & 100 &  &  &  &  &  &  &  & X  &  &  & 0.598 & 0.945 & 0.004  \\ 
+\hline % \cline{2-17}
+\multirow[t]{2}{*}{ukWaC T11-size} %  
+    % ukwac-NLI-size_sample_min1_dim50-10fold   0.564   93.3    +/- 0.93
+    & 3.5 & 1 & 50 &  &  &  &  &  &  &  &  & X  &  & 0.564 & 0.933 & 0.009  \\ 
+\hline
+\hline
+%% https://fasttext.cc/docs/en/pretrained-vectors.html
+\multirow[t]{2}{*}{Wikipedia17} %  
+    % wiki-10fold   0.586   94.7    +/- 0.32
+    & ca 2,300 & 5 & 300 &  &  &  &  &  &  &  &  &  & X & 0.586 & 0.947 & 0.003  \\ 
 \hline
 \end{tabular}
 \end{center}
@@ -336,23 +409,23 @@ optimizer, recurrent\_dropout, sequence length, learning epochs and batch size, 
 We then used the same configuration for all experiments.
 
 \subsection{Discussion} %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{table}[h]
-\begin{center}
-\begin{tabular}{l|r|r}
-\hline
-only bnc   		& $0.56$ \\ \hline
-only wikipedia 	& $0.58$ \\ \hline
-only enTenTen	& $0.59$ \\ \hline
-\hline
-T11 low 		& $0.57$ \\ \hline
-T11 medium		& $0.48$ \\ \hline
-T11 high		& $0.51$ \\ \hline
-\hline
-bnc + T11 (all) & $0.61$ \\ \hline
-\end{tabular}
-\end{center}
-\caption{\label{tab:results}Results with different data set, calculated via 3-fold cross validation on the training set.} 
-\end{table}
+%\begin{table}[h]
+%\begin{center}
+%\begin{tabular}{l|r|r}
+%\hline
+%only bnc   		& $0.56$ \\ \hline
+%only wikipedia 	& $0.58$ \\ \hline
+%only enTenTen	& $0.59$ \\ \hline
+%\hline
+%T11 low 		& $0.57$ \\ \hline
+%T11 medium		& $0.48$ \\ \hline
+%T11 high		& $0.51$ \\ \hline
+%\hline
+%bnc + T11 (all) & $0.61$ \\ \hline
+%\end{tabular}
+%\end{center}
+%\caption{\label{tab:results}Results with different data set, calculated via 3-fold cross validation on the training set.} 
+%\end{table}
 
 \egon{Mention evaluation method/metric/etc.}
 
