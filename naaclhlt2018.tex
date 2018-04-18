@@ -92,22 +92,21 @@ The system is available under the APLv2 open-source license.
 Ever since conceptual metaphor theory was laid out in \newcite{LakoffJohnson80}, the most vexing question has remained a methodological one: how can conceptual metaphors be reliably identified in language use? Although manual identification was put on a stronger methodological footing with the Metaphor Identification Procedure (MIP) \cite{doi:10.1080/10926480709336752} and its elaboration into MIPVU \cite{Steen2010}, fuzzy areas remain due to the fact that conceptual metaphors can vary between primary metaphors and complex metaphors \cite[cf.][]{Grady1997}. 
 Furthermore, highly conventionalized metaphorical expressions might not be processed in the same way as novel metaphors. The core process of manual metaphor identification is not completely unproblematic either since it can be difficult to establish whether the meaning of a lexical unit in its context deviates from its basic meaning or not. 
 In the face of that slippery terrain, automatic metaphor identification emerges as an extremely challenging task. 
-An increasing volume of research since the start of annual workshops at NAACL in 2013 has shown first promising results using different methods of automated metaphor identification \cite[cf.][]{%W13-0900,
-W14-2300,W15-1400,W16-1100}.
+An increasing volume of research since the start of annual workshops at NAACL in 2013 has shown first promising results using different methods of automated metaphor identification \cite[cf.~for example][]{%W13-0900,W14-2300,
+W15-1400,W16-1100}.
 The current shared task of metaphor identification provided a further opportunity to put the computational spotting of metaphors to the test.
 
 Our bid for this task combines \fT \cite{bojanowski2016enriching} word embeddings (WEs) with a single-layer Long Short Term Memory (LSTM) bidirectional recurrent neural network (BRNN) architecture.
-The input, parallel sequences of unlabelled \fT representations of words, is fed into the BRNN which in turn predicts metaphorical usage for each word. 
-The WEs were learnt on different large corpora (BNC, Wikipedia, enTenTen13, ukWaC) and the TOEFL11 Corpus of Non-Native English \cite{ETS2:ETS202331}; a corpus that was used, among others, in the First Native Language Identification Shared Task \cite{tetreault-blanchard-cahill:2013:BEA} held at the \emph{8th Workshop on Innovative Use of NLP for Building Educational Applications} as part of NAACL-HLT 2013.
+The input, sequences of WE representations of words, is fed into the BRNN which in turn predicts metaphorical usage for each word. 
+The WEs were trained on different large corpora (BNC, Wikipedia, enTenTen13, ukWaC) and the TOEFL11 Corpus of Non-Native English \cite{ETS2:ETS202331}; a corpus that was used, among others, in the First Native Language Identification Shared Task \cite{tetreault-blanchard-cahill:2013:BEA} held at the \emph{8th Workshop on Innovative Use of NLP for Building Educational Applications} as part of NAACL-HLT 2013.
 
 We were lead by the idea that metaphorical language use changes while gaining proficiency in a language, and so we hoped to be able to utilise the information contained in corpora of different proficiency levels.
 
 The paper is organised as follows: We present our system design with related work in
 Section~\ref{sec:design}, the implementation in
-Section~\ref{sec:implementation}, and its evaluation in
+Section~\ref{sec:implementation}, and the experimental setup with an evaluation in
 Section~\ref{sec:results}. 
-Section~\ref{sec:conclusion} concludes with an outlook on possible
-implementation improvements.
+Section~\ref{sec:conclusion} concludes with an outlook on possible next steps.
 
 
 
@@ -115,9 +114,9 @@ implementation improvements.
 \label{sec:design}
 
 Generally, our design builds upon the foundation laid out by~\newcite{collobert:2011b} for a neural network (NN) architecture and learning algorithm that can be applied to various natural language processing tasks.
-The most related task specific design is likely \newcite{W16-1104} who used a NN in combination with WEs to detect metaphors. 
+The most related task specific design is likely by \newcite{W16-1104} who used a NN in combination with WEs to detect metaphors. 
 % they demonstrate positive influence of part-of-speech (POS) features.
-But they used a dense multi-layer NN, and we adapted the design of \newcite{%stemle:2016:WAC-X,
+But they used a dense multi-layer NN, and we adapted the design of \newcite{stemle:2016:WAC-X,
 stemle:2016:evalita} who combined WEs with a recurrent NN (RNN) to predict part-of-speech (PoS) tags of computer-mediated communication (CMC) and Web corpora for German and Italian.
 RNNs are usually considered to be more suitable for labelling sequential data such as text.
 
@@ -126,12 +125,12 @@ RNNs are usually considered to be more suitable for labelling sequential data su
 \label{subsec:we}
 
 Recently, state-of-the-art results on various linguistic tasks were accomplished by architectures using neural-network based WEs.
-\newcite{baroni-dinu-kruszewski:2014:P14-1} conducted a set of experiments  comparing the popular word2vec~\cite{DBLP:journals/corr/abs-1301-3781,arXiv:1310.4546} implementation for creating WEs with other distributional methods that yielded valuable results across various (semantic) tasks. 
-These results suggest that the word embeddings substantially outperform the other architectures on semantic similarity and analogy detection tasks.
-Subsequently,~\newcite{TACL570} conducted a comprehensive set of experiments and comparisons that suggest that much of the improved results are due to  the system design and parameter optimizations, rather than the selected method.  
+\newcite{baroni-dinu-kruszewski:2014:P14-1} conducted a set of experiments comparing the popular word2vec~\cite{DBLP:journals/corr/abs-1301-3781,arXiv:1310.4546} implementation for creating WEs with other well-known distributional methods across various (semantic) tasks.
+These results suggest that the WEs substantially outperform the other architectures on semantic similarity and analogy detection tasks.
+Subsequently,~\newcite{TACL570} conducted a comprehensive set of experiments that suggest that much of the improved results are due to the system design and parameter optimizations, rather than the selected method. 
 They conclude that "there does not seem to be a consistent significant advantage to one approach over the other".
 
-Word embeddings provide high-quality low dimensional vector representations of words from large corpora of unlabelled data. The representations, typically computed using NNs, encode many linguistic regularities and patterns~\cite{arXiv:1310.4546}.
+WEs provide high-quality low dimensional vector representations of words from large corpora of unlabelled data. The representations, typically computed using NNs, encode many linguistic regularities and patterns~\cite{arXiv:1310.4546}.
 
 
 \subsection{Bidirectional Recurrent Neural Network}  %%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -139,14 +138,14 @@ Word embeddings provide high-quality low dimensional vector representations of w
 
 NNs consist of a large number of simple, highly interconnected processing nodes in an architecture loosely inspired by the structure of the cerebral cortex of the brain~\cite{oreilly2000}.
 The nodes receive weighted inputs through their connections on one side and \emph{fire} according to their individual thresholds of their shared activation function.
-A firing node passes on an activation to all connected successive nodes on the other side.
+A firing node passes on an activation to all connected nodes on the other side.
 During learning the input is propagated through the network and the actual output is compared to the desired output. 
 Then, the weights of the connections (and the thresholds) are adjusted step-wise so as to more closely resemble a configuration that would produce the desired output.
 After all training data have been presented, the process typically starts over, and the learned output values will usually be closer to the desired values.
 
 Recurrent NNs (RNNs) are NNs where the connections between the elements are directed cycles, i.e.~the networks have loops, and this enables the NN to model sequential dependencies of the input.
 However, regular RNNs have fundamental difficulties learning long-term dependencies, and special kinds of RNNs need to be used~\cite{Hochreiter1991}; 
-a very popular kind is the so called long short-term memory (LSTM) network proposed by~\newcite{Hochreiter:1997:LSM:1246443.1246450}.
+a very popular one is the so called long short-term memory (LSTM) network proposed by~\newcite{Hochreiter:1997:LSM:1246443.1246450}.
 
 Bidirectional RNNs (BRNN), introduced by \newcite{Schuster1997}, extend unidirectional RNNs by introducing a layer, where the directed cycles enable the input to flow in opposite sequential order. 
 While processing text, this means that for any given word the network not only considers the text leading up to the word but also the text thereafter.
@@ -157,7 +156,7 @@ also from large amounts of available unlabelled data.
 
 \subsection{Language Learner Data} %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Our experimental design also utilizes data from language learner corpora, specifically from the TOEFL 11 corpus \cite{ETS2:ETS202331}. This is based on the intuition that metaphor use might vary depending on learner proficiency.
+Our experimental design also utilizes data from language learner corpora (cf.~Section \ref{sec:wemodels}). This is based on the intuition that metaphor use might vary depending on learner proficiency.
 \newcite{W13-0902} %p.18 
 indeed found a correlation between higher proficiency ratings of learner texts and a higher density of metaphors in these texts. Their study is also one of the few in the field of automated metaphor detection that are concerned with learner language. Their aim, however, is quite different to the current study as they try to establish annotations for metaphoric language use that can help to train an automated classifier of metaphors in test-taker essays. The current study, by contrast, utilizes learner corpus data to build WEs among other corpora representing written standard language. Learner language could be a particularly helpful source of information for automated metaphor detection via WEs as learner language provides different usage patterns compared to WEs derived from standard language corpora.
 
@@ -165,63 +164,64 @@ indeed found a correlation between higher proficiency ratings of learner texts a
 \section{Implementation} %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \label{sec:implementation}
 
-We maintain the implementation in a source code repository at \url{https://github.com/bot-zen/}.  
-
+We maintain the implementation in a source code repository\footnote{\url{https://github.com/bot-zen/}}.
 Our system uses sequences of word features as input to a BRNN with a LSTM architecture.
-For multiple feature sets, e.g.~multiple WE models or additional PoS tags, sequences are concatenated on the word level such that the number of features for an individual word grows but the sequence length stays constant.
-%\footnote{For an overview of combining multiple WE models see, e.g.~\newcite{Turian:2010:WRS:1858681.1858721}.}
-Input sequences represent original textual sentence segments of an exactly pre-defined length, and in case the sentence segment is shorter than the sequence, the remaining slots are padded, i.e.~they are filled with identical dummy information.
-The output is a single sequence of matching length with labels indicating whether the corresponding word is used metaphorically or not.
 
 
 \subsection{Word Embeddings} %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-We use gensim\footnote{\url{https://radimrehurek.com/gensim/}}, a Python tool for unsupervised semantic modelling from plain text, to load pre-computed WE models, and to compute a word's embedding vector representation for our {NN}.
-Words missing in a WE model, i.e.~out-of-vocabulary words (OOV), are first estimated by a fixed context of non-OOVs of the OOV word;
-and if this fails, OOVs are mapped to an ultimately stable, but at first randomly generated, vector representation.
+We use gensim\footnote{\url{https://radimrehurek.com/gensim/}}, a Python tool for unsupervised semantic modelling from plain text, to load pre-computed WE models, and to compute embedding-vector representations of words.
+Words missing in a WE model, i.e.~out-of-vocabulary words (OOV), are first estimated by looking at a fixed context of their non-OOV words.
+If this fails, OOVs are mapped to their individual, randomly generated, vector representations.
 
 
-\subsection{Recurrent Neural Network Layer} %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Neural Network} %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Our implementation uses Keras, a high-level NNs library, written in Python and
-capable of running on top of either TensorFlow~\cite{tensorflow2016} or Theano~\cite{chollet2015}. 
-In our case, it runs on top of TensorFlow, an open source software library for numerical computation.
+Our implementation uses Keras, a high-level NNs library written in Python, on top of TensorFlow~\cite{tensorflow2016}, an open source software library for numerical computation.
 
-% maybe something like:
-% $S_{1,1}\ ^\frown S_{1,2}, S_{2,1}\ ^\frown S_{2,2}, \ldots, S_{n,m}$
-% Each $S_{n,m}$ is output of an embeddings lookup for a specific model.
-The Network consists of a variable number of input layers that corresponds to the number of used WE models. 
-Each input feeds into a masking layer such that the padded values from the input sequence will be skipped in all downstream layers.\footnote{This is considered good practice and speeds up processing with long sequences and many padded values -- in our case, with rather short sequences it did not help much.}
-The masked sequential input is concatenated and fed into a bidirectional LSTM layer that, in turn, projects to a fully connected output layer that is activated by a softmax function.
+The number of input layers corresponds to the number of employed feature sets. 
+For multiple feature sets, e.g.~multiple WE models or additional PoS tags, sequences are concatenated on the word level such that the number of features for an individual word grows.
+%\footnote{For an overview of combining multiple WE models see, e.g.~\newcite{Turian:2010:WRS:1858681.1858721}.}
+
+Input sequences have a pre-defined length and represent original textual sentence segments.
+In case a sentence is longer than the sequence length, the input is split into multiple segments. 
+And if a segment is shorter than the sequence length, the remaining slots are padded, i.e.~they are filled with identical dummy information.
+
+Each input layer feeds into a masking layer such that the padded values from the input sequence will be skipped in all downstream layers.\footnote{This is considered good practice and speeds up processing with long sequences and many padded values -- with our rather short sequences it did not help much.}
+The masked input is fed into a bidirectional LSTM layer that, in turn, projects to a fully connected output layer that is activated by a softmax function.
+
+The output is a single sequence of matching length with labels indicating whether the corresponding word is used metaphorically or not.
 
 During training, we use dropout for the linear transformation of the recurrent state, i.e.~the network drops a fraction of recurrent connections, 
 which helps prevent overfitting~\cite{Srivastava2014}; 
 and we use a weighted categorical cross-entropy loss function to counteract the fact that far fewer words in our sequences are labelled as metaphorical than non-metaphorical, which usually hampers classification performance \cite[cf.][]{Kotsiantis2006HandlingReview}.
 
 
+
 \section{Experiments and Results} %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \label{sec:results}
 
 Participants of the ST could either participate in the metaphor prediction tracks for verbs only, all content part-of-speech only, or both. 
-For a given text in VUA, and for each sentence, the task was to predict metaphoricity for each verb or content word respectively, and submit the result to CodaLab for evaluation. 
+For a given text in VUA, and for each sentence, the task was to predict metaphoricity for each verb or content word respectively, and submit the result to CodaLab\footnote{\url{http://codalab.org}} for evaluation. 
 Results were calculated as the harmonic average of the precision and recall (F1-score) of the metaphoricity label.
-We participated with our system in both task.
+We participated with our system in both tasks.
 
 The remainder of this section introduces the official data set, our WE models and describes our fixed hyper-parameters.
 The results of different combinations of WE models are shown in Table \ref{tab:models}. 
 Also note that \emph{all results} in this paper refer only to the all content part-of-speech task.
 
 
-\subsection{ST Data} %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Shared Task Data} %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 The VUA, the corpus that was used in the shared task, originates from the British National Corpus (BNC). 
 Altogether, it is comprised of 117 texts covering four genres (academic, conversation, fiction, news).
-For the ST VUA was pre-divided by the organisers into a training and a test set.
-The training set was labelled and could be used to train classifiers, while the participants were supposed to label the test set and return it to the organisers for the official evaluation.
+For the ST, VUA was pre-divided by the organisers into a training and a test set.
+The training set was labelled and could be used to train classifiers, while the participants were supposed to label the test set and submit it.
 The distribution of metaphorical vs.~non-metaphorical labels was imbalanced with a ratio of roughly 1:6 ($11044:61567$).
 
 
 \subsection{Word Embedding Models}  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\label{sec:wemodels}
 
 We use pre-built WE models for the following corpora: \emph{BNC} and \emph{enTenTen13} web corpus \cite{1120431} from the SketchEngine\footnote{\url{https://embeddings.sketchengine.co.uk/static/index.html}}, as well as \emph{Wikipedia17}\footnote{\url{https://fasttext.cc/docs/en/pretrained-vectors.html}} from \fT \cite{DBLP:journals/corr/BojanowskiGJM16}. 
 
@@ -231,7 +231,7 @@ The two parameters were altered to take the smaller sizes of our corpora into ac
 Three individual models were trained for the different proficiency levels low, medium and high of the training subset of the \emph{TOEFL11 Corpus of Non-Native English} \cite{ETS2:ETS202331}; another model was trained for the full training set comprising all three proficiency levels. One model was trained for the \emph{Vienna-Oxford International Corpus of English} (VOICE) \cite{Seidlhofer2013TheVOICE}, a corpus of English as it is spoken by a non-native speaking majority of users in different contexts.
 
 Two models were trained for ukWaC \cite{wackycorpora2009}, a corpus constructed from the Web using medium-frequency words from the BNC as seeds.
-One model for the full corpus and one model for a random sample of documents approximating the token count of the full TOEFL11 training set.
+The first model for the full corpus and the second model for a random sample of documents approximating the token count of the full TOEFL11 training set.
 
 
 \begin{table*}[t]
@@ -350,22 +350,22 @@ One model for the full corpus and one model for a random sample of documents app
 \hline
 \end{tabular}
 \end{center}
-\caption{\label{tab:models}Overview of the word embedding models we used, and evaluation results for individual models and some combinations: number of tokens in the original corpus, parameters \texttt{-minCount} and \texttt{-dim} for \fT during training of the models. \\
-F1-scores were calculated by us on the official labelled test set (and should therefore coincide with the organisers' results). 
-We also report the mean accuracy as well as the standard deviation in the accuracy
+\caption{\label{tab:models}Overview of the word embedding models we used, and evaluation results for individual models and some combinations on the metaphor prediction track for \emph{all content part-of-speech}. \\ Number of tokens in the original corpus, parameters \texttt{minCount} and \texttt{dim} for \fT during training of the models. Our calculated F1-scores on the official labelled test set (they should coincide with the organisers' results). 
+The mean accuracy as well as the standard deviation in the accuracy
 for 10-fold cross validation runs on the training set.} 
 \end{table*}
 
 
-\subsection{Hyper-parameter Tuning} %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Hyper-Parameter Tuning} %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 Hyper-parameter tuning is important for good performance. The parameters of our system were optimised via an ad-hoc grid search in 3-fold cross validation (CV) runs.
 
 Parameters were:
-NN optimizer (\emph{rmsprop}, adadelta, adam), recurrent\_dropout rate for the LSTM layer (0.1, \emph{0.25}, 0.5), dropout for the input layer (\emph{0}, 0.1, 0.2), sequence length (5, 10, \emph{15}, 50), learning epochs (3, 5, \emph{20}, 32) and batch size (16, \emph{32}, 64), and the network architecture, e.g.~introducing a second LSTM abstraction layer or using a Gated Recurrent (GRU) layer instead of the LSTM layer.
+NN optimizer (\emph{rmsprop}, adadelta, adam), recurrent dropout rate for the LSTM layer (0.1, \emph{0.25}, 0.5), dropout for the input layer (\emph{0}, 0.1, 0.2), sequence length (5, 10, \emph{15}, 50), learning epochs (3, 5, \emph{20}, 32) and batch size (16, \emph{32}, 64), and the network architecture, e.g.~introducing a second LSTM abstraction layer or using a Gated Recurrent (GRU) layer instead of the LSTM layer.
+Furthermore, we trained WE models with different values for the \texttt{dim} (25, \emph{50}, 100, 150, 200, 250) and \texttt{minCount} (\emph{1}, 2, 5, 10) parameters.
 
 The weight for the categorical cross-entropy loss function is calculated as the logarithm of the ratio of number of words vs. metaphorical labels. The context for estimating OOV words was set to 10.
 
-Once set, we then used the same configuration for all experiments.
+Once set, we used the same configuration for all experiments.
 
 
 \section{Conclusion \& Outlook} %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -379,7 +379,7 @@ The best result on the test set was achieved with a combination of TOEFL11 learn
 So far, the results are encouraging---but also mixed---regarding our initial idea that metaphorical language use at different proficiency levels could be utilised to recognizing metaphorical usage of words. 
 To this end, we are looking forward to output from the \emph{European Network for Combining Language Learning with Crowdsourcing Techniques}\footnote{\url{http://www.cost.eu/COST_Actions/ca/CA16105}}, where potentially more and more fine-grained language learner data will be collected and made available.
 
-\section*{Acknowledgments} %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{Acknowledgements} %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 The computational results presented have been achieved in part using the \href{http://vsc.ac.at}{Vienna
 Scientific Cluster (VSC)}.
 
