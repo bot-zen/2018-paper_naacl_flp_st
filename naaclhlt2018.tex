@@ -19,7 +19,7 @@
 \usepackage[utf8x]{inputenc}
 % NOTES  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \usepackage[usenames]{xcolor}
-\usepackage[draft,inline,nomargin,index]{fixme}
+\usepackage[inline,nomargin,index]{fixme}
 \fxsetup{theme=color,mode=multiuser}
 
 \FXRegisterAuthor{alex}{al}{\color{violet!60}Alex} 
@@ -76,7 +76,7 @@
 \begin{document}
 \maketitle
 \begin{abstract}
-This article describes the system that participated in the shared task (ST) on metaphor detection \cite{Leong2018ATask} on the VU Amsterdam Metaphor Corpus (VUA).
+This article describes the system that participated in the shared task (ST) on metaphor detection \cite{Leong2018} on the Vrije University Amsterdam Metaphor Corpus (VUA).
 The ST was part of the workshop on processing figurative language at the 16th annual conference of the \emph{North American Chapter of the Association for Computational Linguistics} (NAACL2018).
 
 The system combines a small assertion of trending techniques, which implement matured methods, from NLP and ML; 
@@ -92,12 +92,13 @@ The system is available under the APLv2 open-source license.
 Ever since conceptual metaphor theory was laid out in \newcite{LakoffJohnson80}, the most vexing question has remained a methodological one: how can conceptual metaphors be reliably identified in language use? Although manual identification was put on a stronger methodological footing with the Metaphor Identification Procedure (MIP) \cite{doi:10.1080/10926480709336752} and its elaboration into MIPVU \cite{Steen2010}, fuzzy areas remain due to the fact that conceptual metaphors can vary between primary metaphors and complex metaphors \cite[cf.][]{Grady1997}. 
 Furthermore, highly conventionalized metaphorical expressions might not be processed in the same way as novel metaphors. The core process of manual metaphor identification is not completely unproblematic either since it can be difficult to establish whether the meaning of a lexical unit in its context deviates from its basic meaning or not. 
 In the face of that slippery terrain, automatic metaphor identification emerges as an extremely challenging task. 
-An increasing volume of research since the start of annual workshops at NAACL in 2013 has shown first promising results using different methods of automated metaphor identification \cite[cf.][]{W13-0900,W14-2300,W15-1400,W16-1100}.
+An increasing volume of research since the start of annual workshops at NAACL in 2013 has shown first promising results using different methods of automated metaphor identification \cite[cf.][]{%W13-0900,
+W14-2300,W15-1400,W16-1100}.
 The current shared task of metaphor identification provided a further opportunity to put the computational spotting of metaphors to the test.
 
 Our bid for this task combines \fT \cite{bojanowski2016enriching} word embeddings (WEs) with a single-layer Long Short Term Memory (LSTM) bidirectional recurrent neural network (BRNN) architecture.
 The input, parallel sequences of unlabelled \fT representations of words, is fed into the BRNN which in turn predicts metaphorical usage for each word. 
-The WEs were learnt on different large corpora (BNC, Wikipedia, enTenTen) and the TOEFL11 Corpus of Non-Native English \cite{ETS2:ETS202331}; a corpus that was used, among others, in the First Native Language Identification Shared Task \cite{tetreault-blanchard-cahill:2013:BEA} held at the \emph{8th Workshop on Innovative Use of NLP for Building Educational Applications} as part of NAACL-HLT 2013.
+The WEs were learnt on different large corpora (BNC, Wikipedia, enTenTen13, ukWaC) and the TOEFL11 Corpus of Non-Native English \cite{ETS2:ETS202331}; a corpus that was used, among others, in the First Native Language Identification Shared Task \cite{tetreault-blanchard-cahill:2013:BEA} held at the \emph{8th Workshop on Innovative Use of NLP for Building Educational Applications} as part of NAACL-HLT 2013.
 
 We were lead by the idea that metaphorical language use changes while gaining proficiency in a language, and so we hoped to be able to utilise the information contained in corpora of different proficiency levels.
 
@@ -116,7 +117,8 @@ implementation improvements.
 Generally, our design builds upon the foundation laid out by~\newcite{collobert:2011b} for a neural network (NN) architecture and learning algorithm that can be applied to various natural language processing tasks.
 The most related task specific design is likely \newcite{W16-1104} who used a NN in combination with WEs to detect metaphors. 
 % they demonstrate positive influence of part-of-speech (POS) features.
-But they used a dense multi-layer NN, and we adapted the design of \newcite{stemle:2016:WAC-X,stemle:2016:evalita} who combined WEs with a recurrent NN (RNN) to predict part-of-speech (PoS) tags of computer-mediated communication (CMC) and Web corpora for German and Italian.
+But they used a dense multi-layer NN, and we adapted the design of \newcite{%stemle:2016:WAC-X,
+stemle:2016:evalita} who combined WEs with a recurrent NN (RNN) to predict part-of-speech (PoS) tags of computer-mediated communication (CMC) and Web corpora for German and Italian.
 RNNs are usually considered to be more suitable for labelling sequential data such as text.
 
 
@@ -146,18 +148,24 @@ Recurrent NNs (RNNs) are NNs where the connections between the elements are dire
 However, regular RNNs have fundamental difficulties learning long-term dependencies, and special kinds of RNNs need to be used~\cite{Hochreiter1991}; 
 a very popular kind is the so called long short-term memory (LSTM) network proposed by~\newcite{Hochreiter:1997:LSM:1246443.1246450}.
 
-Bidirectional RNNs (BRNN) \cite{Schuster1997BidirectionalNetworks} extend unidirectional RNNs by introducing a layer, where the directed cycles enable the input to flow in opposite sequential order. 
+Bidirectional RNNs (BRNN), introduced by \newcite{Schuster1997}, extend unidirectional RNNs by introducing a layer, where the directed cycles enable the input to flow in opposite sequential order. 
 While processing text, this means that for any given word the network not only considers the text leading up to the word but also the text thereafter.
 
 Overall, we benefit from available labelled data with this design but
 also from large amounts of available unlabelled data.
 
 
+\subsection{Language Learner Data} %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Our experimental design also utilizes data from language learner corpora, specifically from the TOEFL 11 corpus \cite{ETS2:ETS202331}. This is based on the intuition that metaphor use might vary depending on learner proficiency.
+\newcite{W13-0902} %p.18 
+indeed found a correlation between higher proficiency ratings of learner texts and a higher density of metaphors in these texts. Their study is also one of the few in the field of automated metaphor detection that are concerned with learner language. Their aim, however, is quite different to the current study as they try to establish annotations for metaphoric language use that can help to train an automated classifier of metaphors in test-taker essays. The current study, by contrast, utilizes learner corpus data to build WEs among other corpora representing written standard language. Learner language could be a particularly helpful source of information for automated metaphor detection via WEs as learner language provides different usage patterns compared to WEs derived from standard language corpora.
+
+
 \section{Implementation} %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \label{sec:implementation}
 
-We maintain the implementation in a source code repository at
-\url{https://github.com/bot-zen/}.  
+We maintain the implementation in a source code repository at \url{https://github.com/bot-zen/}.  
 
 Our system uses sequences of word features as input to a BRNN with a LSTM architecture.
 For multiple feature sets, e.g.~multiple WE models or additional PoS tags, sequences are concatenated on the word level such that the number of features for an individual word grows but the sequence length stays constant.
@@ -169,8 +177,8 @@ The output is a single sequence of matching length with labels indicating whethe
 \subsection{Word Embeddings} %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 We use gensim\footnote{\url{https://radimrehurek.com/gensim/}}, a Python tool for unsupervised semantic modelling from plain text, to load pre-computed WE models, and to compute a word's embedding vector representation for our {NN}.
-Words missing in a WE model, i.e.~out-of-vocabulary words (OOV), are first estimated by a fixed context of non-OOVs of the OOV word.
-And if this fails, OOVs are mapped to an ultimately stable, but at first randomly generated, vector representation.
+Words missing in a WE model, i.e.~out-of-vocabulary words (OOV), are first estimated by a fixed context of non-OOVs of the OOV word;
+and if this fails, OOVs are mapped to an ultimately stable, but at first randomly generated, vector representation.
 
 
 \subsection{Recurrent Neural Network Layer} %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -179,118 +187,52 @@ Our implementation uses Keras, a high-level NNs library, written in Python and
 capable of running on top of either TensorFlow~\cite{tensorflow2016} or Theano~\cite{chollet2015}. 
 In our case, it runs on top of TensorFlow, an open source software library for numerical computation.
 
-The input to our network are parallel sequences of the same length. They consist of (insert length) sentences.
-\egon{formalise this} %like:
+% maybe something like:
 % $S_{1,1}\ ^\frown S_{1,2}, S_{2,1}\ ^\frown S_{2,2}, \ldots, S_{n,m}$
 % Each $S_{n,m}$ is output of an embeddings lookup for a specific model.
+The Network consists of a variable number of input layers that corresponds to the number of used WE models. 
+Each input feeds into a masking layer such that the padded values from the input sequence will be skipped in all downstream layers.\footnote{This is considered good practice and speeds up processing with long sequences and many padded values -- in our case, with rather short sequences it did not help much.}
+The masked sequential input is concatenated and fed into a bidirectional LSTM layer that, in turn, projects to a fully connected output layer that is activated by a softmax function.
+
+During training, we use dropout for the linear transformation of the recurrent state, i.e.~the network drops a fraction of recurrent connections, 
+which helps prevent overfitting~\cite{Srivastava2014}; 
+and we use a weighted categorical cross-entropy loss function to counteract the fact that far fewer words in our sequences are labelled as metaphorical than non-metaphorical, which usually hampers classification performance \cite[cf.][]{Kotsiantis2006HandlingReview}.
 
 
-\fxnote{are the input sentences those taken from the MIPVU corpus to be annotated for metaphorical words or are they extracted from the corpora (i.e. Word Embeddings)? --perhaps we could add some more information on the nature of these sentences}
-
-
-
-\egon{need more details about "How the Word Embeddings from the different corpora are combined to make one representation? (averaging, concatenation, ...)".
-}
-
-
-
-%During training, we group sentences of the same length into batches and process
-%the batches according to sentence length in increasing order.
-Each single word in the sequence is represented by multiple WEs that come from different corpora. %sources (see Section~\ref{sec:results}).
-%Note that the WEs of the domain-specific corpus may have only been derived
-%from a small corpus.
-For unknown words, i.e.~words without a pre-computed WE, we first try to
-find the most similar WE considering %FIXME: 10?
-surrounding words.  
-If this fails, the unknown word is mapped to a randomly generated stable vector
-representation.
-%In Total, each word is represented by $2,280$ features: two times $500$ (WEs),
-%and sixteen times $80$ for two 8-grams (word beginning and ending).
-%If words are shorter than 8 characters their 8-grams are zero-padded.
-
-This sequential input is fed into a LSTM layer that, in turn, projects to a
-fully connected output layer with softmax activation function.
-During training we use dropout for the projection into the output layer,
-%i.e.~we set a fraction ($0.5$) of the input units to 0 at each update, 
-which helps prevent overfitting~\cite{Srivastava2014}.
-We use a weighted categorical cross-entropy loss function \cite{} and backpropagation in
-conjunction with the RMSprop optimization \cite{} for learning.  The weights are calculated according to the logarithm of the inverse count of metaphorical vs.~non-metaphorical words.
-At the time of writing, this was the Keras default---or the explicitly
-documented and suggested option to be used---for our type of architecture. 
-
-\fxnote{should we say something more on the “surrounding” from which WE were computed?}
-
-\section{Experiments and Results} %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Experiments and Results} %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \label{sec:results}
 
-\egon{Specify the predefined length of input sentences}
+Participants of the ST could either participate in the metaphor prediction tracks for verbs only, all content part-of-speech only, or both. 
+For a given text in VUA, and for each sentence, the task was to predict metaphoricity for each verb or content word respectively, and submit the result to CodaLab for evaluation. 
+Results were calculated as the harmonic average of the precision and recall (F1-score) of the metaphoricity label.
+We participated with our system in both task.
+
+The remainder of this section introduces the official data set, our WE models and describes our fixed hyper-parameters.
+The results of different combinations of WE models are shown in Table \ref{tab:models}. 
+Also note that \emph{all results} in this paper refer only to the all content part-of-speech task.
 
 
-\egon{Mention which task(s) we participated in, and discuss all relevant results.}
+\subsection{ST Data} %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{Data} %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-We used pre-built WEs for the following large corpora: BNC and enTenTen \cite{1120431}
-from the SketchEngine\footnote{\url{https://sketchengine.co.uk}}
-\cite{DBLP:journals/corr/BojanowskiGJM16} as well as Wikipedia from fastText
-\cite{mikolov2018advances}. 
-
-The considerably smaller TOEFL11 corpus was split into three parts corresponding to the three labelled proficiency levels (low, medium, high) and WEs were computed for each.
-\egon{more on how the WE were computed from TOEFL 11}
-
-\subsubsection{Language Learner Data} %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-Our experimental design also utilizes data from language learner corpora, specifically from the TOEFL 11 corpus \cite{ETS2:ETS202331}. This is based on the intuition that metaphor use might vary depending on learner proficiency.
-\newcite{W13-0902} %p.18 
-indeed found a correlation between higher proficiency ratings of learner texts and a higher density of metaphors in these texts. Their study is also one of the few in the field of automated metaphor detection that are concerned with learner language. Their aim, however, is quite different to the current study as they try to establish annotations for metaphoric language use that can help to train an automated classifier of metaphors in test-taker essays. The current study, by contrast, utilizes learner corpus data to build WEs among other corpora representing written standard language. Learner language could be a particularly helpful source of information for automated metaphor detection via WEs as learner language provides different usage patterns compared to WEs derived from standard language corpora.
+The VUA, the corpus that was used in the shared task, originates from the British National Corpus (BNC). 
+Altogether, it is comprised of 117 texts covering four genres (academic, conversation, fiction, news).
+For the ST VUA was pre-divided by the organisers into a training and a test set.
+The training set was labelled and could be used to train classifiers, while the participants were supposed to label the test set and return it to the organisers for the official evaluation.
+The distribution of metaphorical vs.~non-metaphorical labels was imbalanced with a ratio of roughly 1:6 ($11044:61567$).
 
 
-\subsubsection{Pre-trained Word Embedding Models}
+\subsection{Word Embedding Models}  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+We use pre-built WE models for the following corpora: \emph{BNC} and \emph{enTenTen13} web corpus \cite{1120431} from the SketchEngine\footnote{\url{https://embeddings.sketchengine.co.uk/static/index.html}}, as well as \emph{Wikipedia17}\footnote{\url{https://fasttext.cc/docs/en/pretrained-vectors.html}} from \fT \cite{DBLP:journals/corr/BojanowskiGJM16}. 
 
-\subsubsection{Overview of all Input}
+We trained WE models using \fT's SkipGram model with the default parameters\footnote{\url{https://github.com/facebookresearch/fastText/archive/v0.1.0.zip}} except for the two parameters \texttt{-minCount} (the minimal number of word occurrences) and \texttt{-dim} (size of word vectors). 
+The two parameters were altered to take the smaller sizes of our corpora into account. See Table \ref{tab:models} for details.
 
-%%\begin{table*}[t]
-%\begin{table}[!ht]
-%\begin{center}
-%\small
-%\begin{tabular}{|l|r|r|r|}
-%\hline
-%\multicolumn{1}{|c}{\textbf{Name}}		& 
-%\multicolumn{1}{c}{\shortstack[c]{\textbf{Tokens} \\ \textbf{(Mio)}}} 		& 
-%\multicolumn{1}{c}{\shortstack[c]{\textbf{min} \\ \textbf{Cnt}}} 			& 
-%\multicolumn{1}{c|}{\textbf{dim}} 		\\ 
-%\hline
-%\hline
-%% https://embeddings.sketchengine.co.uk/static/index.html
-%BNC   		& $100$ 	& 5		& 100 \\ % BNC 100-million-word, 100.000.000
-%\hline
-%enTenTen13	& $20,000$ 	& 5		& 100 \\ %
-%\hline
-%\hline
-%% https://fasttext.cc/docs/en/pretrained-vectors.html
-%Wikipedia17	& $~2,300$  & 5	& 300 \\ %
-%\hline
-%\hline
-%ukWaC 		& $2,100$ 	& 5	& 100 \\ % 2.119.891.296
-%ukWaC T11-size	& $3.5$ & 1	&  50 \\ %
-%\hline
-%%\multicolumn{4}{|l|}{TOEFL11 (T11) Training Set} \\
-%%% https://catalog.ldc.upenn.edu/LDC2014T06
-%%\hline
-%T11 (low) 	& $0.3$ 	& 1	&  50 \\ %   245.130
-%T11 (med) & $1.8$	& 1	&  50 \\ % 1.819.407
-%T11 (high)	& $1.4$ 	& 1	&  50 \\ % 1.388.260
-%%\hline
-%T11 (low+med+high)	& $3.5$ 	& 1	&  50 \\ % 3.452.797 tokens
-%\hline
-%VOICE       & $1$ 	 	& 1	&  50  \\ % Voice 1-million-word, 1.003.696
-%\hline
-%\end{tabular}
-%\end{center}
-%\caption{\label{tab:models}.} 
-%\end{table}
-%%\end{table*}
-%
+Three individual models were trained for the different proficiency levels low, medium and high of the training subset of the \emph{TOEFL11 Corpus of Non-Native English} \cite{ETS2:ETS202331}; another model was trained for the full training set comprising all three proficiency levels. One model was trained for the \emph{Vienna-Oxford International Corpus of English} (VOICE) \cite{Seidlhofer2013TheVOICE}, a corpus of English as it is spoken by a non-native speaking majority of users in different contexts.
+
+Two models were trained for ukWaC \cite{wackycorpora2009}, a corpus constructed from the Web using medium-frequency words from the BNC as seeds.
+One model for the full corpus and one model for a random sample of documents approximating the token count of the full TOEFL11 training set.
+
 
 \begin{table*}[t]
 \setlength{\tabcolsep}{3pt}
@@ -312,7 +254,7 @@ indeed found a correlation between higher proficiency ratings of learner texts a
     \multicolumn{1}{ c| }{\rotatebox{90}{ukWaC}} 		&
     \multicolumn{1}{ c| }{\rotatebox{90}{ukWaC T11-size\ }} 		&
     \multicolumn{1}{ c||}{\rotatebox{90}{Wikipedia17}} 		&
-    \multicolumn{1}{ c| }{\rotatebox{90}{F-score on Test Set\ }} 		&
+    \multicolumn{1}{ c| }{\rotatebox{90}{F1-score on Test Set\ }} 		&
     \multicolumn{2}{ c| }{\shortstack[c]{10-fold CV \\ Accuracy \\ on Training Set \\ $\mu$ | $\sigma$ }} 		\\
 \hline
 \hline
@@ -327,18 +269,6 @@ indeed found a correlation between higher proficiency ratings of learner texts a
 \multirow[t]{2}{*}{T11 (low)} % 245.130
     % NLI_2013_low_min1_dim50-10fold    0.207   91.7    +/- 1.64
     & 0.3 & 1 & 50 & X &   &   &  &  & &  &  &  & & 0.207 & 0.917 & 0.016  \\
-    \cline{2-17}
-    % NLIs_low_med_high__voice__bnc-10fold  0.601   95.0    +/- 0.36
-    & 204.5 &  &   & X  & X & X  &  & X  & X &  &  &  &  & 0.601  & 0.950 & 0.004   \\
-    \cline{2-17}
-    % NLIs_low_med_high__voice__ententen-10fold 0.603   94.7    +/- 0.64
-    & 19,004.5  &  &   & X  & X & X  &  & X  &  & X &  &  &  & 0.603  & 0.947 & 0.006   \\
-    \cline{2-17}
-    % NLIs_low_med_high__voice__bnc__wiki__ententen-10fold  0.597   95.2    +/- 0.31
-    & 21,404.5  &  &   & X  & X & X  &  & X  & X & X &  &  & X & 0.597  & \textbf{0.952} & 0.003   \\
-    \cline{2-17}
-    % NLIs_low_med_high__ukwac-NLI-size_sample_min1_dim50-10fold    0.576   94.1    +/- 0.34
-    & 7  &  &   & X  & X & X  &  &   &  &  &  & X &  & 0.576  & 0.941 & 0.003   \\
 \hline
 \multirow[t]{2}{*}{T11 (med)} %  1.819.407
     % NLI_2013_med_min1_dim50-10fold    0.526   92.4    +/- 1.06
@@ -351,97 +281,112 @@ indeed found a correlation between higher proficiency ratings of learner texts a
 \multirow[t]{2}{*}{T11 (l+m+h) } %  3.452.797
     % NLI_2013_all_min1_dim50-10fold    0.541   92.8    +/- 0.82
     &   3.5 & 1 & 50 &  &  &   & X &   &   &  &  &  & & 0.541 & 0.928 & 0.008  \\
-    \cline{2-17}
-    % NLIs_all__bnc_min1_dim50-10fold   0.613   94.5    +/- 0.53
-    & 103.5 &   &    &  &  &   & X &   & X &  &  &  & & \textbf{0.613} & 0.945 & 0.005  \\
 \hline
 \multirow[t]{2}{*}{VOICE} %  Voice 1-million-word, 1.003.696
     % voice_min1_dim50-10fold   0.495   92.3    +/- 0.95
     & 1 & 1 & 50 &  &  &  &  & X & &  &  &  & & 0.495 & 0.923 & 0.010  \\
 \hline
-\hline
 % https://embeddings.sketchengine.co.uk/static/index.html
 \multirow[t]{2}{*}{BNC} %  BNC 100-million-word, 100.000.000
     % bnc-10fold    0.597   94.2    +/- 0.54
     & 100      & 5 & 100 &  &  &  &  &   & X &    &  &  &   & 0.597 & 0.942 & 0.005  \\
-    \cline{2-17}
-    % ukwac-NLI-size__bnc_min1_dim50-10fold 0.597   94.8    +/- 0.31
-    & 103.5    &   &     &  &  &   &  &   & X &  &  & X &  & 0.597 & 0.948 & 0.003  \\
-    \cline{2-17}
-    % bnc__wiki__ententen-10fold    0.605   95.1    +/- 0.34
-    & 21,400 &   &     &  &  &   &  &   & X & X  &  &  & X & 0.605 & 0.951 & 0.003  \\
 \hline
 \multirow[t]{2}{*}{enTenTen13} % 
     % ententen-10fold   0.594   94.7    +/- 0.40
     & 19,000 & 5 & 100 & &  &  &  &  &   & X &  &  & & 0.594 & 0.947 & 0.004  \\
 \hline
-\hline
 \multirow[t]{2}{*}{ukWaC} %  2.119.891.296 tokens
     % ukwac-10fold  0.598   94.5    +/- 0.41
-    & 2,100 & 5 & 100 &  &  &  &  &  &  &  & X  &  &  & 0.598 & 0.945 & 0.004  \\
+    & 2,100 & 5 & 100 &  &  &  &  &  &  &  & X  &  &  & \textbf{0.598} & 0.945 & 0.004  \\
 \hline % \cline{2-17}
 \multirow[t]{2}{*}{ukWaC T11-size} %  
     % ukwac-NLI-size_sample_min1_dim50-10fold   0.564   93.3    +/- 0.93
     & 3.5 & 1 & 50 &  &  &  &  &  &  &  &  & X  &  & 0.564 & 0.933 & 0.009  \\
 \hline
-\hline
 %% https://fasttext.cc/docs/en/pretrained-vectors.html
 \multirow[t]{2}{*}{Wikipedia17} %  
     % wiki-10fold   0.586   94.7    +/- 0.32
-    & ca 2,300 & 5 & 300 &  &  &  &  &  &  &  &  &  & X & 0.586 & 0.947 & 0.003  \\
+    & ca 2,300 & 5 & 300 &  &  &  &  &  &  &  &  &  & X & 0.586 & \textbf{0.947} & 0.003  \\
+\hline
+\hline
+    % NLIs_low_med_high__ukwac-NLI-size_sample_min1_dim50-10fold    0.576   94.1    +/- 0.34
+    & 7  &  &   & X  & X & X  &  &   &  &  &  & X &  & 0.576  & 0.941 & 0.003   \\
+    \cline{2-17}
+    % NLIs_all__ukwac-NLI-size_sample_min1_dim50-10fold       0.5669893020886398      93.55   +/- 0.83
+    &   7 &  &  &  &  &   & X &   &   &  &  & X & & 0.567 & 0.936 & 0.008  \\
+    \cline{2-17}    
+    %% NLI_all__voice_min1_dim50-10fold                                 0.5243175834834419  93.64     +/- 0.52
+    %&   4.5 &  &  &  &  &   & X & X  &   &  &  &  & & 0.524 & 0.936 & 0.005  \\
+    %\cline{2-17}    
+    % NLIs_low_med_high__bnc_min1_dim50-10fold                         0.5964377559767596  94.40     +/- 0.83
+    & 103.5  &  &   & X  & X & X  &  &  & X &  &  &  &  & 0.596  & 0.944 & 0.008   \\
+    \cline{2-17}
+    % NLIs_all__bnc_min1_dim50-10fold   0.613   94.5    +/- 0.53
+    & 103.5 &   &    &  &  &   & X &   & X &  &  &  & & \textbf{0.613} & 0.945 & 0.005  \\
+   	\cline{2-17}
+    % ukwac-NLI-size__bnc_min1_dim50-10fold 0.597   94.8    +/- 0.31
+    & 103.5    &   &     &  &  &   &  &   & X &  &  & X &  & 0.597 & 0.948 & 0.003  \\
+    \cline{2-17}
+    % NLIs_low_med_high__voice__bnc-10fold  0.601   95.0    +/- 0.36
+    & 104.5 &  &   & X  & X & X  &  & X  & X &  &  &  &  & 0.601  & 0.950 & 0.004   \\
+    \cline{2-17}
+    % NLIs_all__bnc__ukwac-NLI-size_sample_min1_dim50-10fold  0.586087420042644       95.11   +/- 0.23
+    & 107 &   &    &  &  &   & X &   & X &  &  & X & & 0.586 & 0.951 & 0.002  \\
+   	\cline{2-17}
+    % NLIs_all__voice__bnc__ukwac-NLI-size_sample_min1_dim50-10fold   0.5495198079231692      94.87   +/- 0.33
+    & 108 &   &    &  &  &   & X & X & X &  &  & X & & 0.550 & 0.948 & 0.003  \\
+    \cline{2-17}
+    % NLIs_low_med_high__voice__ententen-10fold 0.603   94.7    +/- 0.64
+    & 19,004.5  &  &   & X  & X & X  &  & X  &  & X &  &  &  & 0.603  & 0.947 & 0.006   \\
+    \cline{2-17}
+    % bnc__wiki__ententen-10fold    0.605   95.1    +/- 0.34
+    & 21,400 &   &     &  &  &   &  &   & X & X  &  &  & X & 0.605 & 0.951 & 0.003  \\
+    \cline{2-17}
+    % voice__bnc__wiki__ententen-10fold  0.594320757232369        95.27     +/- 0.26
+    & 21,401 &   &     &  &  &   &  & X  & X & X  &  &  & X & 0.594 & \textbf{0.953} & 0.003  \\
+    \cline{2-17}    
+    % NLIs_low_med_high__voice__bnc__wiki__ententen-10fold  0.597   95.2    +/- 0.31
+    & 21,404.5  &  &   & X  & X & X  &  & X  & X & X &  &  & X & 0.597  & 0.952 & 0.003   \\
 \hline
 \end{tabular}
 \end{center}
-\caption{\label{tab:models}.} 
+\caption{\label{tab:models}Overview of the word embedding models we used, and evaluation results for individual models and some combinations: number of tokens in the original corpus, parameters \texttt{-minCount} and \texttt{-dim} for \fT during training of the models. \\
+F1-scores were calculated by us on the official labelled test set (and should therefore coincide with the organisers' results). 
+We also report the mean accuracy as well as the standard deviation in the accuracy
+for 10-fold cross validation runs on the training set.} 
 \end{table*}
 
 
+\subsection{Hyper-parameter Tuning} %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Hyper-parameter tuning is important for good performance. The parameters of our system were optimised via an ad-hoc grid search in 3-fold cross validation (CV) runs.
 
+Parameters were:
+NN optimizer (\emph{rmsprop}, adadelta, adam), recurrent\_dropout rate for the LSTM layer (0.1, \emph{0.25}, 0.5), dropout for the input layer (\emph{0}, 0.1, 0.2), sequence length (5, 10, \emph{15}, 50), learning epochs (3, 5, \emph{20}, 32) and batch size (16, \emph{32}, 64), and the network architecture, e.g.~introducing a second LSTM abstraction layer or using a Gated Recurrent (GRU) layer instead of the LSTM layer.
 
-\subsection{Hyper-parameter tuning} %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-Hyper-parameter tuning is important for good performance. The parameters of our system were optimised via an ad-hoc grid search. Parameters were:
-optimizer, recurrent\_dropout, sequence length, learning epochs and batch size, and the network architecture, e.g.~introducing a second LSTM abstraction layer or using a Gated Recurrent (GRU) layer instead of the LSTM layer.
+The weight for the categorical cross-entropy loss function is calculated as the logarithm of the ratio of number of words vs. metaphorical labels. The context for estimating OOV words was set to 10.
 
-\egon{describe hyper-parameters for submitted final model}
+Once set, we then used the same configuration for all experiments.
 
-\egon{context for OOV words: 10 - never grid-searched}
-
-We then used the same configuration for all experiments.
-
-\subsection{Discussion} %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%\begin{table}[h]
-%\begin{center}
-%\begin{tabular}{l|r|r}
-%\hline
-%only bnc   		& $0.56$ \\ \hline
-%only wikipedia 	& $0.58$ \\ \hline
-%only enTenTen	& $0.59$ \\ \hline
-%\hline
-%T11 low 		& $0.57$ \\ \hline
-%T11 medium		& $0.48$ \\ \hline
-%T11 high		& $0.51$ \\ \hline
-%\hline
-%bnc + T11 (all) & $0.61$ \\ \hline
-%\end{tabular}
-%\end{center}
-%\caption{\label{tab:results}Results with different data set, calculated via 3-fold cross validation on the training set.} 
-%\end{table}
-
-\egon{Mention evaluation method/metric/etc.}
 
 \section{Conclusion \& Outlook} %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \label{sec:conclusion}
-\fxnote{Add content}
 
-Note that WEs could also be computed in an input layer. There, the input would be the actual word sequences, and the input could be accompanied by additional meta data.
+The combination of WEs with a BRNN is capable of recognizing metaphorical usage of words better than many other already tested approaches.
+More importantly, our design does not rely on WordNet or VerbNet information, and does not need concreteness or abstractness information like many successful architectures from previous annual workshops at NAACL. 
+Besides VUA, our system only needs running text.
 
-
+The best result on the test set was achieved with a combination of TOEFL11 learner data and data from the BNC. 
+So far, the results are encouraging---but also mixed---regarding our initial idea that metaphorical language use at different proficiency levels could be utilised to recognizing metaphorical usage of words. 
+To this end, we are looking forward to output from the \emph{European Network for Combining Language Learning with Crowdsourcing Techniques}\footnote{\url{http://www.cost.eu/COST_Actions/ca/CA16105}}, where potentially more and more fine-grained language learner data will be collected and made available.
 
 \section*{Acknowledgments} %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 The computational results presented have been achieved in part using the \href{http://vsc.ac.at}{Vienna
 Scientific Cluster (VSC)}.
 
+\medskip
 
+%\cleardoublepage
+%\newpage
 \bibliographystyle{acl_natbib}
 \bibliography{naaclhlt2018,Mendeley-egon}
 
