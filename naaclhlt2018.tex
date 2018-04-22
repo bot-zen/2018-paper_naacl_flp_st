@@ -32,6 +32,9 @@
 \usepackage{multirow}
 \usepackage{siunitx}
 \sisetup{input-ignore={,},group-separator={,},input-decimal-markers={.}}
+% CHANGES
+\usepackage{changes}
+\colorlet{Changes@Color}{green}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \usepackage[hyperref]{naaclhlt2018}
@@ -143,7 +146,7 @@ During learning the input is propagated through the network and the actual outpu
 Then, the weights of the connections (and the thresholds) are adjusted step-wise so as to more closely resemble a configuration that would produce the desired output.
 After all training data have been presented, the process typically starts over, and the learned output values will usually be closer to the desired values.
 
-Recurrent NNs (RNNs) are NNs where the connections between the elements are directed cycles, i.e.~the networks have loops, and this enables the NN to model sequential dependencies of the input.
+Recurrent NNs (RNNs) \added{, introduced by {\hypersetup{citecolor=green}\newcite{Elman1990}},} are NNs where the connections between the elements are directed cycles, i.e.~the networks have loops, and this enables the NN to model sequential dependencies of the input.
 However, regular RNNs have fundamental difficulties learning long-term dependencies, and special kinds of RNNs need to be used~\cite{Hochreiter1991}; 
 a very popular one is the so called long short-term memory (LSTM) network proposed by~\newcite{Hochreiter:1997:LSM:1246443.1246450}.
 
@@ -177,7 +180,7 @@ If this fails, OOVs are mapped to their individual, randomly generated, vector r
 
 \subsection{Neural Network} %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Our implementation uses Keras, a high-level NNs library written in Python, on top of TensorFlow~\cite{tensorflow2016}, an open source software library for numerical computation.
+Our implementation uses Keras \added{{\hypersetup{citecolor=green}\cite{chollet2015}}}, a high-level NNs library written in Python, on top of TensorFlow~\cite{tensorflow2016}, an open source software library for numerical computation.
 
 The number of input layers corresponds to the number of employed feature sets. 
 For multiple feature sets, e.g.~multiple WE models or additional PoS tags, sequences are concatenated on the word level such that the number of features for an individual word grows.
