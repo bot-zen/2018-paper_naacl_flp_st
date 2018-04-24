@@ -95,11 +95,12 @@ The system is available under the APLv2 open-source license.
 Ever since conceptual metaphor theory was laid out in \newcite{LakoffJohnson80}, the most vexing question has remained a methodological one: how can conceptual metaphors be reliably identified in language use? Although manual identification was put on a stronger methodological footing with the Metaphor Identification Procedure (MIP) \cite{doi:10.1080/10926480709336752} and its elaboration into MIPVU \cite{Steen2010}, fuzzy areas remain due to the fact that conceptual metaphors can vary between primary metaphors and complex metaphors \cite[cf.][]{Grady1997}. 
 Furthermore, highly conventionalized metaphorical expressions might not be processed in the same way as novel metaphors. The core process of manual metaphor identification is not completely unproblematic either since it can be difficult to establish whether the meaning of a lexical unit in its context deviates from its basic meaning or not. 
 In the face of that slippery terrain, automatic metaphor identification emerges as an extremely challenging task. 
-An increasing volume of research since the start of annual workshops at NAACL in 2013 has shown first promising results using different methods of automated metaphor identification (see for example \newcite{%W13-0900,W14-2300,W15-1400,
-W16-1100} for the previous event).
+An increasing volume of research since the start of annual workshops at NAACL in 2013 has shown first promising results using different methods of automated metaphor identification (see for example %\newcite{W13-0900}, \newcite{W14-2300},
+\newcite{W15-1400} and 
+\newcite{W16-1100} for previous events).
 The current shared task of metaphor identification provided a further opportunity to put the computational spotting of metaphors to the test.
 
-Our bid for this task combines (cf.~Section \ref{sec:design}) \fT word embeddings (WEs) with a single-layer long short-term memory bidirectional recurrent neural network (BiRNN) architecture.
+Our bid for this task combines (cf.~Section~\ref{sec:design}) \fT word embeddings (WEs) with a single-layer long short-term memory bidirectional recurrent neural network (BiRNN) architecture.
 The input, sequences of WE representations of words, is fed into the BiRNN which predicts metaphorical usage for each word. 
 
 The WEs were trained (cf.~Section \ref{sec:wemodels}) on different large corpora (BNC, Wikipedia, enTenTen13, ukWaC) and on the Vienna-Oxford International Corpus of English (VOICE) as well as on the TOEFL11 Corpus of Non-Native English. The latter corpus was used, among others, in the First Native Language Identification Shared Task \cite{tetreault-blanchard-cahill:2013:BEA} held at the \emph{8th Workshop on Innovative Use of NLP for Building Educational Applications} as part of NAACL-HLT 2013.
@@ -121,7 +122,7 @@ Generally, our design builds upon the foundation laid out by~\newcite{collobert:
 The most related task specific design is given in \newcite{W16-1104} who used a NN in combination with WEs to detect metaphors. 
 % they demonstrate positive influence of part-of-speech (POS) features.
 In contrast to our study, they used a dense multi-layer NN while we adapted the design of \newcite{stemle:2016:WAC-X,
-stemle:2016:evalita}, who combined WEs with a recurrent NN (RNN) to predict part-of-speech (PoS) tags of computer-mediated communication (CMC) in Web corpora for German and Italian.
+stemle:2016:evalita}, who combined WEs with a recurrent NN (RNN) to predict part-of-speech (PoS) tags of computer-mediated communication (CMC) and Web corpora for German and Italian.
 RNNs are usually considered to be more suitable for labelling sequential data such as text.
 
 
